@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Asaas Payments - {{$titulo}}</title>
+    <title>Asaas Payments - {{$title}}</title>
 
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -29,7 +29,7 @@
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <h1 class="h3 mb-0 text-gray-800">Seja bem vindo a Asaas Payments</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Asaas Payments</h1>
                 </nav>  
                 
                 <div class="container-fluid">

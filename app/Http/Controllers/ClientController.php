@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class IndexController extends Controller
+class ClientController extends Controller
 {
     public function index(){
 
         $variables = array(
-            "title" => "Dashboard",
+            "title" => "Manutenção de Clientes",
             "components" => array(
-                "home/welcome" => array()
+                "client/index" => array()
             ),
-            "scripts" => array('index')
+            "scripts" => array('index', 'client', 'mask')
         );
 
         return view("index", $variables);

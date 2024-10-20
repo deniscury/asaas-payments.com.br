@@ -40,8 +40,8 @@ function getClients() {
                     buttons = "<div class='text-center'>" +
                             "<button class='btn btn-sm btn-primary' title='Editar Cliente' onclick='updateClient(" + client.id +");'><i class='fas fa-edit'></i></button>&nbsp;" +
                             "<button class='btn btn-sm btn-danger' title='Excluir Cliente' onclick='deleteClient(" + client.id + ");'><i class='fas fa-trash'></i></button>&nbsp;" +
-                            "<button class='btn btn-sm btn-warning' title='Visualizar Cobranças' onclick=''><i class='fas fa-eye'></i></button>&nbsp;" +
-                            "<button class='btn btn-sm btn-success' title='Gerar Cobrança' onclick=''><i class='fas fa-money-bill'></i></button> "+
+                            "<button class='btn btn-sm btn-warning' title='Visualizar Cobranças' onclick='clientInvoices(" + client.id + ");'><i class='fas fa-eye'></i></button>&nbsp;" +
+                            "<button class='btn btn-sm btn-success' title='Gerar Cobrança' onclick=''><i class='fas fa-money-bill'></i></button>"+
                         "</div>"
                 }
                 else{
@@ -107,6 +107,10 @@ function addClient() {
 function updateClient(id) {
     $("#maintenanceClient").modal();
     getClient(id);
+}
+
+function clientInvoices(id){
+    location.href = "/invoice/client/"+id;
 }
 
 function getClient(id) {
