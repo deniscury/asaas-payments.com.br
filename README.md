@@ -1,66 +1,85 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Asaas Payment - Guia de Instalação
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Requisitos do Sistema
 
-## About Laravel
+Para instalar e executar com sucesso a aplicação Asaas Payment, certifique-se de que seu ambiente atenda aos seguintes requisitos:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   **APIs Asaas Payment**: [Configuração](https://github.com/deniscury/api.asaas-payments.com.br)
+-   **PHP**: Versão 8.3.12 ou superior
+-   **Composer**: Gerenciador de dependências para PHP
+-   **Configuração do php.ini**: Certifique-se de que as seguintes extensões estejam habilitadas:
+    -   `curl`
+    -   `ftp`
+    -   `fileinfo`
+    -   `intl`
+    -   `mbstring`
+    -   `exif`
+    -   `mysqli`
+    -   `pdo_mysql`
+    -   `openssl`
+    -   `zip`
+-   **Diretório de Extensão**: Defina o diretório de extensão no seu arquivo `php.ini`:
+    ```
+    extension_dir = "ext"
+    ```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Passos de Instalação
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Siga estes passos para configurar o projeto Asaas Payment:
 
-## Learning Laravel
+1. **Clonar o Repositório**:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    ```bash
+    git clone <url-do-repositorio>
+    ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. **Navegar até a Pasta Raiz do Projeto**:
+   Certifique-se de que você está na pasta raiz do projeto clonado.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    ```bash
+        cd <pasta-do-projeto>
+    ```
 
-## Laravel Sponsors
+3. **Configurar o Arquivo de Ambiente**:
+   Renomeie o arquivo de exemplo de ambiente:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    ```bash
+    mv .env.example .env
+    ```
 
-### Premium Partners
+4. **Instalar Dependências**:
+   Abra seu terminal ou prompt de comando e execute:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+    ```bash
+    composer install
+    ```
 
-## Contributing
+5. **Alterar hosts**:
+   Abra o arquivo hosts (C:\Windows\System32\drivers\etc\hosts) e adicione o DNS:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    ```bash
+    127.0.0.1       asaas-payments.local
+    ```
 
-## Code of Conduct
+6. **Executar a Aplicação**:
+   Inicie o servidor de desenvolvimento local com:
+    ```bash
+    php artisan serve --host=asaas-payments.local --port=8081
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. **Acessar Aplicação**:
+   No seu navegador entre no link http://asaas-payments.local:8081
 
-## Security Vulnerabilities
+## Observações Adicionais
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   Certifique-se de ter as permissões necessárias para os diretórios e arquivos dentro do projeto.
+-   Se você encontrar algum problema, verifique suas instalações do PHP e Composer, e assegure-se de que todas as extensões necessárias estão habilitadas.
+-   Para mais assistência, consulte a documentação oficial do [Laravel](https://laravel.com/docs).
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Essa versão é estruturada, fornece comandos claros e inclui notas adicionais para melhor clareza e usabilidade.
+
+```
+
+```

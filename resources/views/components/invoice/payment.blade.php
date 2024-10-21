@@ -58,6 +58,9 @@
                 
                 @component('components/invoice/pix')
                 @endcomponent   
+
+                @component('components/invoice/card')
+                @endcomponent   
             </div>
         </div>
     </div>  
