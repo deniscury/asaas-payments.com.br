@@ -8,7 +8,6 @@
 			<div class="modal-body">					
 				<div class="form-group">
 					<label>Nome</label>
-					<input type="hidden" class="form-control" id="clientId">
 					<input type="text" class="form-control" id="clientName" required>
 				</div>					
 				<div class="form-group">

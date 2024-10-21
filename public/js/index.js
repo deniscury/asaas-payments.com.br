@@ -26,5 +26,5 @@ var fnError = function(response){
         message += "\n" + error;
     });
 
-    alert(message);
+    jAlert(message, "Ok");
 }
