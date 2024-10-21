@@ -28,6 +28,7 @@
     </script>
 
     <script src="/js/custom.min.js"></script>
+    <script src="/js/alerts.js"></script>
     
     @foreach($scripts as $script)
         <script src="/js/{{$script}}.js"></script>

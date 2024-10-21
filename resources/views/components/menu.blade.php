@@ -31,11 +31,4 @@
             <span>Cobranças</span>
         </a>
     </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="route('asaas.payment')">
-            <i class="fas fa-fw fa-money-bill"></i>
-            <span>Gerar Cobrança</span>
-        </a>
-    </li>
 </ul>

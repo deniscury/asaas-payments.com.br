@@ -17,6 +17,7 @@
         rel="stylesheet">
 
     <link href="/css/custom.min.css" rel="stylesheet">
+    <link href="/css/alerts.css" rel="stylesheet">
 
     <link href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css" rel="stylesheet" type="text/css" />
 </head>
@@ -28,7 +29,7 @@
         
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow text-center">
                     <h1 class="h3 mb-0 text-gray-800">Asaas Payments</h1>
                 </nav>  
                 

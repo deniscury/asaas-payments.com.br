@@ -3,8 +3,8 @@ $(document).ready(function () {
 });
 
 function getInvoices() {
-    url = urlApi + "/payment";
-    client_id = $("#client_id").val();
+    url = urlApi + "/invoice";
+    client_id = $("#clientId").val();
 
     if(client_id != "" && client_id != undefined){
         url += "/client/"+client_id;
@@ -28,13 +28,32 @@ function getInvoices() {
                 button = "";
                 
                 if(invoice.status == "PENDING"){
-                    button = "<button class='btn btn-sm btn-success' title='Efetuar Pagamento' onclick='payment(" + invoice.id + ");'><i class='fas fa-money-bill'></i></button>"
+                    btnClass = "btn-success";
+                    title = "Efetuar Pagamento";
+                    icon = "money-bill";
+                }
+                else{
+                    btnClass = "btn-primary";
+                    title = "Visualizar Cobrança";
+                    icon = "eye";
+                }
+
+                button = "<button class='btn btn-sm " + btnClass + "' title='" + title + "' onclick='payment(" + invoice.id + ");'><i class='fas fa-" + icon + "'></i></button>";
+
+                billing_type = invoice.billing_type
+
+                if(billing_type == "CREDIT_CARD"){
+                    billing_type = "Cartão de Crédito";
+                }
+
+                if(billing_type == "BOLETO"){
+                    billing_type = "Boleto";
                 }
 
                 dataTableData.push({
                     id: invoice.id,
                     client: client.id + " - " + client.name,
-                    billing_type: invoice.billing_type,
+                    billing_type: billing_type,
                     due_date: dueDate.toLocaleDateString('pt-BR'),
                     value: invoice.value.replace(".", ","),
                     status: invoice.status,
@@ -71,5 +90,25 @@ function getInvoices() {
             $("#tbInvoices").dataTable(dataTableOptions);
         },
     });
+}
+
+function getInvoice(){
+    payment_id = $("#paymentId").val();
+
+    $.ajax({
+        url: urlApi + "/invoice/payment/" + payment_id,
+        dataType: "json",
+        type: "GET",
+        crossDomain: true,
+        async: true,
+        success: function (response) {
+            invoice = response.data;
+            clientData(invoice.client, 2);
+        },
+    });
+}
+
+function payment(id){
+    location.href = "/invoice/payment/" + id
 }
 

@@ -9,6 +9,7 @@
                         <div class="col-md-6 text-right">
                             <a class="btn btn-sm btn-success" href="javascript:addClient();">
                                 <i class="fa fa-plus"></i>&nbsp;Novo cliente
+                                <input type="hidden" id="clientId">
                             </a>
                         </div>
                     </div>
@@ -57,4 +58,6 @@
         </div>
     </div>        
     @component('components/client/maintenance')          
+    @endcomponent  
+    @component('components/invoice/invoice')          
     @endcomponent  

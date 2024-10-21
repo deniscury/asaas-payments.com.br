@@ -29,4 +29,10 @@ Route::prefix('invoice')->group(function(){
             InvoiceController::class, 'index'
         )
     )->name('invoice.indexByClient');
+
+    Route::get('/payment/{invoice}', 
+        array(
+            InvoiceController::class, 'payment'
+        )
+    )->name('invoice.payment');
 });

@@ -1,6 +1,8 @@
 $(document).ready(function () {
     getClients();
 
+    $("#invoiceValue").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix: 'R$ '});
+
     $("#documentType").change(function(){
         if($(this).val() == "CNPJ"){
             $("#clientDocument").mask("99.999.999/9999-99");
@@ -20,6 +22,12 @@ $(document).ready(function () {
         $("#clientAddress").val("");
         $("#clientAddressNumber").val("");
         unmaskForm();
+    });
+
+    $("#invoiceModal").on("hidden.bs.modal", function () {
+        $("#clientId").val("");
+        $("#invoiceValue").val("");
+        $("#clientData").html("<img class='img-responsive img-rounded' style='max-height: 30px; max-width: 30px;' src='/img/ajax_loader.gif'>");
     });
 });
 
@@ -41,7 +49,7 @@ function getClients() {
                             "<button class='btn btn-sm btn-primary' title='Editar Cliente' onclick='updateClient(" + client.id +");'><i class='fas fa-edit'></i></button>&nbsp;" +
                             "<button class='btn btn-sm btn-danger' title='Excluir Cliente' onclick='deleteClient(" + client.id + ");'><i class='fas fa-trash'></i></button>&nbsp;" +
                             "<button class='btn btn-sm btn-warning' title='Visualizar Cobranças' onclick='clientInvoices(" + client.id + ");'><i class='fas fa-eye'></i></button>&nbsp;" +
-                            "<button class='btn btn-sm btn-success' title='Gerar Cobrança' onclick=''><i class='fas fa-money-bill'></i></button>"+
+                            "<button class='btn btn-sm btn-success' title='Gerar Cobrança' onclick='invoiceModal(" + client.id + ");'><i class='fas fa-money-bill'></i></button>"+
                         "</div>"
                 }
                 else{
@@ -106,14 +114,19 @@ function addClient() {
 
 function updateClient(id) {
     $("#maintenanceClient").modal();
-    getClient(id);
+    getClient(id, 1);
 }
 
 function clientInvoices(id){
     location.href = "/invoice/client/"+id;
 }
 
-function getClient(id) {
+function invoiceModal(id) {
+    $("#invoiceModal").modal();
+    getClient(id, 2);
+}
+
+function getClient(id, tipo) {
     $.ajax({
         url: urlApi + "/client/" + id,
         dataType: "json",
@@ -122,32 +135,43 @@ function getClient(id) {
         async: true,
         success: function (response) {
             data = response.data;
-            clientData(data);
+            clientData(data, tipo);
         },
         error: fnError,
     });
 }
 
-function clientData(data) {
+function clientData(data, tipo) {
     $("#clientId").val(data.id);
-    $("#clientName").val(data.name);
 
-    documentNumber = data.document;
+    if(tipo == 1){
+        $("#clientName").val(data.name);
+        documentNumber = data.document;
+        if (documentNumber.length == '11'){
+            $("#documentType").val("CPF");
+        }
+        else{
+            $("#documentType").val("CNPJ");
+        }
+        $("#clientDocument").val(documentNumber);
+        $("#clientEmail").val(data.email);
+        $("#clientPhone").val(data.phone);
+        $("#clientPostalCode").val(data.postal_code);
+        $("#clientAddress").val(data.address);
+        $("#clientAddressNumber").val(data.address_number);
+        maskForm();
+    }
 
-    if (documentNumber.length == '11'){
-        $("#documentType").val("CPF");
+    if(tipo == 2){
+
+        data =   
+            "<strong>" + data.id + " - " + data.name + " <br/> CPF/CNPJ: " + data.document + "</strong><br/>" +
+            "<small>" + "Email: " + data.email + " - Telefone: " + data.phone + "</small><br/>" +
+            "<small>" + "Endereço: " + data.postal_code + " - " + data.address + ", " + data.address_number + "</small>";
+
+        $("#clientData").html(data);
+        $("#invoiceValue").focus();        
     }
-    else{
-        $("#documentType").val("CNPJ");
-    }
-    
-    $("#clientDocument").val(documentNumber);
-    $("#clientEmail").val(data.email);
-    $("#clientPhone").val(data.phone);
-    $("#clientPostalCode").val(data.postal_code);
-    $("#clientAddress").val(data.address);
-    $("#clientAddressNumber").val(data.address_number);
-    maskForm();
 }
 
 function saveClient() {
@@ -162,37 +186,37 @@ function saveClient() {
     address_number = $("#clientAddressNumber").val();
 
     if (name == "") {
-        alert("Por favor preencha o nome do cliente");
+        jAlert("Por favor preencha o nome do cliente", "Ok");
         return;
     }
 
     if (document == "") {
-        alert("Por favor preencha o documento do cliente");
+        jAlert("Por favor preencha o documento do cliente", "Ok");
         return;
     }
 
     if (email == "") {
-        alert("Por favor preencha o email do cliente");
+        jAlert("Por favor preencha o email do cliente", "Ok");
         return;
     }
 
     if (phone == "") {
-        alert("Por favor preencha o telefone do cliente");
+        jAlert("Por favor preencha o telefone do cliente", "Ok");
         return;
     }
 
     if (postal_code == "") {
-        alert("Por favor preencha o CEP do cliente");
+        jAlert("Por favor preencha o CEP do cliente", "Ok");
         return;
     }
 
     if (address == "") {
-        alert("Por favor preencha o endereço do cliente");
+        jAlert("Por favor preencha o endereço do cliente", "Ok");
         return;
     }
 
     if (address_number == "") {
-        alert("Por favor preencha o número do endereço do cliente");
+        jAlert("Por favor preencha o número do endereço do cliente", "Ok");
         return;
     }
 
@@ -226,7 +250,7 @@ function saveClient() {
             message = response.message;
 
             if (message != undefined) {
-                alert(message);
+                jAlert(message, "Ok");
             }
 
             resetDataTable("tbClients", 9)
@@ -242,59 +266,103 @@ function saveClient() {
 }
 
 function deleteClient(id) {
-    confirmation = confirm(
-        "Tem certeza de que deseja excluir esse cliente?"
-    );
-
-    if (confirmation) {
-        $.ajax({
-            url: urlApi + "/client/" + id,
-            dataType: "json",
-            type: "DELETE",
-            crossDomain: true,
-            async: true,
-            beforeSend: function(){
-                resetDataTable("tbClients", 9)
-            },
-            success: function (response) {
-                message = response.message;
-                if (message != undefined) {
-                    alert(message);
-                }
-            },
-            error: fnError,
-            complete: function(){
-                getClients();
+    jConfirm(
+        "Tem certeza de que deseja excluir esse cliente?", "Sim, tenho certeza", "Não, desejo cancelar",
+        function(confirmation){
+            if (confirmation) {
+                $.ajax({
+                    url: urlApi + "/client/" + id,
+                    dataType: "json",
+                    type: "DELETE",
+                    crossDomain: true,
+                    async: true,
+                    beforeSend: function(){
+                        resetDataTable("tbClients", 9)
+                    },
+                    success: function (response) {
+                        message = response.message;
+                        if (message != undefined) {
+                            jAlert(message, "Ok");
+                        }
+                    },
+                    error: fnError,
+                    complete: function(){
+                        getClients();
+                    }
+                });
             }
-        });
-    }
+        }
+    );
 }
 
 function restoreClient(id) {
-    confirmation = confirm(
-        "Tem certeza de que deseja restaurar esse cliente?"
-    );
-
-    if (confirmation) {
-        $.ajax({
-            url: urlApi + "/client/" + id + "/restore",
-            dataType: "json",
-            type: "POST",
-            crossDomain: true,
-            async: true,
-            beforeSend: function(){
-                resetDataTable("tbClients", 9)
-            },
-            success: function (response) {
-                message = response.message;
-                if (message != undefined) {
-                    alert(message);
-                }
-            },
-            error: fnError,
-            complete: function(){
-                getClients();
+    jConfirm(
+        "Tem certeza de que deseja restaurar esse cliente?", "Sim, tenho certeza", "Não, desejo cancelar",
+        function(confirmation){
+            if (confirmation) {
+                $.ajax({
+                    url: urlApi + "/client/" + id + "/restore",
+                    dataType: "json",
+                    type: "POST",
+                    crossDomain: true,
+                    async: true,
+                    beforeSend: function(){
+                        resetDataTable("tbClients", 9)
+                    },
+                    success: function (response) {
+                        message = response.message;
+                        if (message != undefined) {
+                            jAlert(message, "Ok");
+                        }
+                    },
+                    error: fnError,
+                    complete: function(){
+                        getClients();
+                    }
+                });
             }
-        });
+        }
+    );
+}
+
+function generateInvoice() {
+    client_id = $("#clientId").val();
+    billing_type = $("#invoiceBillingType").val();
+    value = $("#invoiceValue").val().replace("R$", "").replaceAll(".", "").replaceAll(",", ".");
+
+    if (value == "" || value <= 0.00) {
+        jAlert("Por favor preencha o valor da cobrança.", "Ok");
+        return;
     }
+
+    $.ajax({
+        url: urlApi + "/invoice/client/" + client_id,
+        dataType: "json",
+        type: "POST",
+        crossDomain: true,
+        async: true,
+        data: {
+            billing_type: billing_type,
+            value: value
+        },
+        beforeSend: function(){
+            $("#btnInvoice").hide();
+        },
+        success: function (response) {
+            message = response.message;
+            data = response.data;
+
+            if (message != undefined) {
+                jAlert(message, "Ok", 
+                    function(){
+                        location.href = "/invoice/payment/" + data.id;
+                    }
+                );
+            }
+        },
+        error: fnError,
+        complete: function(){
+            $("#btnInvoice").show();
+        }
+    });
 }

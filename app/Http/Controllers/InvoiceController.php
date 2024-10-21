@@ -8,7 +8,7 @@ class InvoiceController extends Controller
 {
     public function index($client = null){
         $variables = array(
-            "title" => "Manutenção de Cobranças",
+            "title" => "Relatório de Cobranças",
             "components" => array(
                 "invoice/index" => array(
                     "client" => $client
@@ -16,6 +16,19 @@ class InvoiceController extends Controller
             ),
             "client" => $client,
             "scripts" => array('index', 'invoice', 'mask')
+        );
+
+        return view("index", $variables);
+    }
+
+    public function payment($invoice){
+        $variables = array(
+            "components" => array(
+                "invoice/payment" => array(
+                    "invoice" => $invoice
+                )
+            ),
+            "scripts" => array('index', 'client', 'payment', 'qrcode.min')
         );
 
         return view("index", $variables);
