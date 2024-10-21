@@ -30,8 +30,13 @@ function getInvoice(){
                 if (billing_type == "BOLETO"){
                     bill(invoice);
                 }
+
                 if (billing_type == "PIX"){
                     pix(invoice);
+                }
+
+                if (billing_type == "CREDIT_CARD"){
+                    $("#dvCreditCard").show();
                 }
             }
 
@@ -87,7 +92,7 @@ function pix(invoice){
         success: function (response) {
             data = response.data;
             pixData = data.pix;
-            //makeQRCode(pixData.payload);
+
             $("#qrCode").attr("src", "data:image/jpeg;base64, "+pixData.encodedImage)
             $("#pixLink").html(pixData.payload);
             $("#dvPix").show();
@@ -96,13 +101,44 @@ function pix(invoice){
     });
 }
 
-function makeQRCode(payload){
-    new QRCode("qrCode", {
-        text: payload,
-        width: 100,
-        height: 100,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
+
+
+function creditCard(){
+    id = $("#invoiceId").val();
+    card_number = $("#cardNumber").val();
+    expiry_month = $("#expiryMonth").val();
+    expiry_year = $("#expiryYear").val();
+    ccv = $("#ccv").val();
+
+    $.ajax({
+        url: urlApi + "/invoice/" + id + "/credit-card",
+        dataType: "json",
+        type: "POST",
+        crossDomain: true,
+        async: true,
+        beforeSend: function(){
+            $("#btnCreditCard").hide();
+        },
+        data: {
+            card_number: card_number,
+            expiry_month: expiry_month,
+            expiry_year: expiry_year,
+            ccv: ccv
+        },
+        success: function (response) {
+            message = response.message;
+
+            if (message != undefined) {
+                jAlert(message, "Ok", 
+                    function(){
+                        location.reload();
+                    }
+                );
+            }
+        },
+        error: fnError,
+        complete: function(){
+            $("#btnCreditCard").show();
+        }
     });
-};
+}

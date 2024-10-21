@@ -28,7 +28,7 @@ class InvoiceController extends Controller
                     "invoice" => $invoice
                 )
             ),
-            "scripts" => array('index', 'client', 'payment', 'qrcode.min')
+            "scripts" => array('index', 'client', 'payment')
         );
 
         return view("index", $variables);
